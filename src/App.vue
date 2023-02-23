@@ -3,19 +3,19 @@
     <div class="todo">
       <div class="task-input">
         <input v-model="addtask" type="text" placeholder="New a Task" />
-        <button @click="New_Task(' ')">Submit</button>
+        <button @click="NewTask">{{statebutton}}</button>
       </div>
 
       <div class="taskbox">
         
-        <div v-for="(item, index) in arr" :key="index">
-          <li class="task">
-            <label>
-              <input type="checkbox" id="1" />
-              <p>{{ item.value }}</p>
+        <div class="taskLine" v-for="(item, index) in arr" :key="index">
+          <li v-if="!item.isDone" class="task">
+            
+              <input  type="checkbox"  @input="checkout_task(index,item)"  />
+              <span>{{ item.value }}</span> 
               <button @click="Edit_task(index)">Edit</button>
               <button @click="Delete_task(index)">Delete</button>
-            </label>
+            
           </li>
         </div>
       </div>
@@ -30,47 +30,57 @@ export default {
   name: "App",
   data() {
     return {
+      statebutton : 'Submit' ,
       addtask: "",
       editTask: null,
       arr: [
-        {
-          value: 'Gomo test : change sim',
-        }
+
       ],
     };
   },
   components: {
   },
   methods: {
-    New_Task() {
+    NewTask() {
       // this.arr.push(this.addtask)
       // this.addtask = ""
       // console.log(this.arr)
-      if(this.addtask.length !== null && this.editTask === null){
+      if(this.addtask.length !== 0 && this.statebutton !== 'Update' ){
           this.arr.push(
                 {
                   value: this.addtask,
+                  isDone : false
                 }
             )
           this.addtask = ''
-        //  console.log(1) 
+         console.log(1) 
       }
-
+      else if(this.editTask === null){
+          return;
+      }
       else{
         this.arr[this.editTask].value = this.addtask
+        // this.arr[this.editTask].isDone = false
         this.editTask = null
+        this.statebutton ='Submit'
         this.addtask = ''
+        console.log(2)
       }
+      // this.addtask = ''
       console.log(this.arr)
 
     },
     Delete_task(idx){
         this.arr.splice(idx, 1) 
+        // console.log(idx,item)
     },
-
+    checkout_task(index){
+       this.arr[index].isDone = true
+    },
     Edit_task(idx){
       this.addtask = this.arr[idx].value
       this.editTask = idx
+      this.statebutton ='Update'
     }
   },
 };
@@ -82,24 +92,21 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-ิbody {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  background: #4AB1FF;
-}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* color: #2c3e50; */
-  background: greenyellow
+  background: greenyellow;
   
+    height: 100vh;
 }
-.taskbox .task {
+.taskbox .task   {
   list-style: none;
 }
-.task label {
+.taskLine {
   display: flex;
+
 }
 </style>
