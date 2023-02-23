@@ -7,22 +7,14 @@
       </div>
 
       <div class="taskbox">
-        <!-- <li class="task">
-          <label>
-            <input type="checkbox" id="1" />
-            <p>Gomo not Support : Change Promotion</p>
-            <button @click="Edit_task()">Edit</button>
-            <button @click="Delete_task()">Delete</button>
-          </label>
-        </li> -->
         
         <div v-for="(item, index) in arr" :key="index">
           <li class="task">
             <label>
               <input type="checkbox" id="1" />
-              <p>{{ item }}</p>
-              <button @click="Edit_task()">Edit</button>
-              <button @click="Delete_task()">Delete</button>
+              <p>{{ item.value }}</p>
+              <button @click="Edit_task(index)">Edit</button>
+              <button @click="Delete_task(index)">Delete</button>
             </label>
           </li>
         </div>
@@ -39,17 +31,47 @@ export default {
   data() {
     return {
       addtask: "",
-      arr: [],
+      editTask: null,
+      arr: [
+        {
+          value: 'Gomo test : change sim',
+        }
+      ],
     };
   },
-  components: {},
+  components: {
+  },
   methods: {
     New_Task() {
-      // this.i++
-      this.arr.push(this.addtask)
-      this.addtask = ""
+      // this.arr.push(this.addtask)
+      // this.addtask = ""
+      // console.log(this.arr)
+      if(this.addtask.length !== null && this.editTask === null){
+          this.arr.push(
+                {
+                  value: this.addtask,
+                }
+            )
+          this.addtask = ''
+        //  console.log(1) 
+      }
+
+      else{
+        this.arr[this.editTask].value = this.addtask
+        this.editTask = null
+        this.addtask = ''
+      }
       console.log(this.arr)
+
     },
+    Delete_task(idx){
+        this.arr.splice(idx, 1) 
+    },
+
+    Edit_task(idx){
+      this.addtask = this.arr[idx].value
+      this.editTask = idx
+    }
   },
 };
 </script>
@@ -61,14 +83,18 @@ export default {
   box-sizing: border-box;
 }
 ิbody {
-  /* display: none; */
-  background: #3c87ff;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #4AB1FF;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* color: #2c3e50; */
+  background: greenyellow
+  
 }
 .taskbox .task {
   list-style: none;
